@@ -35,9 +35,12 @@ public class PlaneControl : MonoBehaviour
     //wing vars
     public float maxLiftForce;
     public float liftForceRatio;
+    public float noseLiftAmount;
+    public float noseLiftLimit;
 
     //working vars
     public Vector3 curVelocity;
+    public Vector3 curRotation;
 
     // Start is called before the first frame update
     void Start()
@@ -91,19 +94,29 @@ public class PlaneControl : MonoBehaviour
     {
         //engine controll
         curVelocity = rb.velocity;
+        curRotation = transform.localEulerAngles;
 
         if (Mathf.Abs(curVelocity.x + curVelocity.y + curVelocity.z) < maxEngineSpeed)
         {
             rb.AddRelativeForce(Vector3.forward * maxForce * usedThrottle);
         }
 
-        //TODO SET TO LOCAL ROTATION 
         //pitch
-        transform.Rotate(Vector3.right * maxPitchForce * pitch);
+        transform.Rotate(Vector3.right * maxPitchForce * pitch, Space.Self);
         //roll
-        transform.Rotate(Vector3.forward * maxRollForce * roll);
+        transform.Rotate(Vector3.forward * maxRollForce * roll * -1, Space.Self);
 
         //yaw
-        transform.Rotate(Vector3.up * maxYawForce * yaw);
+        transform.Rotate(Vector3.up * maxYawForce * yaw * -1, Space.Self);
+
+        //lift
+        rb.AddForce(Vector3.up * Mathf.Clamp(liftForceRatio * Mathf.Abs(curVelocity.x + curVelocity.y + curVelocity.z), 0, maxLiftForce));
+
+        //nose lift on turns and inversions
+        if (Mathf.Abs(transform.localEulerAngles.x) > noseLiftLimit)
+        {
+            rb.AddRelativeTorque(Vector3.right * Mathf.Abs(transform.localEulerAngles.x) * noseLiftAmount);
+        }
+
     }
 }

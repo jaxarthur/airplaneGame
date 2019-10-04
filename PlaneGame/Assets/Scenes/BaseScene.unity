@@ -120,6 +120,81 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &99060370
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 99060373}
+  - component: {fileID: 99060372}
+  - component: {fileID: 99060371}
+  m_Layer: 0
+  m_Name: Terrain
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 4294967295
+  m_IsActive: 1
+--- !u!154 &99060371
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99060370}
+  m_Material: {fileID: 13400000, guid: 85c87ad5552fc49f79c2939633af77c4, type: 2}
+  m_Enabled: 1
+  m_TerrainData: {fileID: 15600000, guid: cd3222f4bb233452ba88dbf97bf5aa5a, type: 2}
+  m_EnableTreeColliders: 1
+--- !u!218 &99060372
+Terrain:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99060370}
+  m_Enabled: 1
+  serializedVersion: 5
+  m_TerrainData: {fileID: 15600000, guid: cd3222f4bb233452ba88dbf97bf5aa5a, type: 2}
+  m_TreeDistance: 5000
+  m_TreeBillboardDistance: 50
+  m_TreeCrossFadeLength: 5
+  m_TreeMaximumFullLODCount: 50
+  m_DetailObjectDistance: 80
+  m_DetailObjectDensity: 1
+  m_HeightmapPixelError: 5
+  m_SplatMapDistance: 1000
+  m_HeightmapMaximumLOD: 0
+  m_ShadowCastingMode: 2
+  m_DrawHeightmap: 1
+  m_DrawInstanced: 0
+  m_DrawTreesAndFoliage: 1
+  m_ReflectionProbeUsage: 1
+  m_MaterialTemplate: {fileID: 2100000, guid: 594ea882c5a793440b60ff72d896021e, type: 2}
+  m_BakeLightProbesForTrees: 1
+  m_PreserveTreePrototypeLayers: 0
+  m_DeringLightProbesForTrees: 1
+  m_ScaleInLightmap: 0.0256
+  m_LightmapParameters: {fileID: 15203, guid: 0000000000000000f000000000000000, type: 0}
+  m_GroupingID: 0
+  m_AllowAutoConnect: 1
+--- !u!4 &99060373
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99060370}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &222437423
 GameObject:
   m_ObjectHideFlags: 0
@@ -473,15 +548,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bbc5cc3c3e884fcd99862598445fa2b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stickyThrottleSpeed: 0.05
-  maxEngineSpeed: 100
-  maxForce: 100
+  stickyThrottleSpeed: 0.01
+  maxEngineSpeed: 1000
+  maxForce: 25000
   maxPitchForce: 1
   maxRollForce: 1
   maxYawForce: 1
-  maxLiftForce: 3
-  liftForceRatio: 0.5
+  maxLiftForce: 10000
+  liftForceRatio: 1000
+  noseLiftAmount: 0.001
+  noseLiftLimit: 15
   curVelocity: {x: 0, y: 0, z: 0}
+  curRotation: {x: 0, y: 0, z: 0}
 --- !u!4 &1956244328 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2688178139593442328, guid: a686be64edb7146168928c8a73be0a98,
@@ -497,8 +575,8 @@ Rigidbody:
   m_GameObject: {fileID: 1956244323}
   serializedVersion: 2
   m_Mass: 1000
-  m_Drag: 0.05
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 1
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
