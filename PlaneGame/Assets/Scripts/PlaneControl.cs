@@ -107,7 +107,7 @@ public class PlaneControl : MonoBehaviour
         transform.Rotate(Vector3.forward * maxRollForce * roll * -1, Space.Self);
 
         //yaw
-        transform.Rotate(Vector3.up * maxYawForce * yaw * -1, Space.Self);
+        transform.Rotate(Vector3.up * maxYawForce * yaw, Space.Self);
 
         //lift
         rb.AddForce(Vector3.up * Mathf.Clamp(liftForceRatio * Mathf.Abs(curVelocity.x + curVelocity.y + curVelocity.z), 0, maxLiftForce));
