@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlaneControl : MonoBehaviour
 {
     //parent vars
-    private Rigidbody rb; 
+    private Rigidbody rb;
+    private GameObject prop;
 
 
     //input vars
@@ -26,6 +27,7 @@ public class PlaneControl : MonoBehaviour
     //engine vars
     public float maxEngineSpeed;
     public float maxForce;
+    public float propSpeed;
 
     //control surface vars
     public float maxPitchForce;
@@ -46,6 +48,7 @@ public class PlaneControl : MonoBehaviour
     void Start()
     {
        rb = gameObject.GetComponent<Rigidbody>();
+        prop = gameObject.transform.Find("prop").gameObject;
     }
 
     // Update is called once per frame
@@ -100,6 +103,9 @@ public class PlaneControl : MonoBehaviour
         {
             rb.AddRelativeForce(Vector3.forward * maxForce * usedThrottle);
         }
+
+        //spin Prop
+        prop.transform.Rotate(Vector3.up * usedThrottle * propSpeed, Space.Self);
 
         //pitch
         transform.Rotate(Vector3.right * maxPitchForce * pitch, Space.Self);
