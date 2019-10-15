@@ -8,8 +8,11 @@ public class CameraFollow : MonoBehaviour
     public Vector3 positionOffset;
     public Vector3 rotationOffset;
 
-    public Vector3 newPos;
-    public Quaternion newRot;
+    public float posSpeed;
+    public float rotSpeed;
+
+    private Vector3 newPos;
+    private Quaternion newRot;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,8 +20,12 @@ public class CameraFollow : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        
+        newPos = player.transform.position + player.transform.up * positionOffset.y + player.transform.forward * positionOffset.z + player.transform.right * positionOffset.x;
+        transform.position = Vector3.Lerp(transform.position, newPos, posSpeed);
+
+        newRot = player.transform.rotation * Quaternion.Euler(rotationOffset);
+        transform.rotation = Quaternion.Lerp(transform.rotation, newRot, rotSpeed);
     }
 }
