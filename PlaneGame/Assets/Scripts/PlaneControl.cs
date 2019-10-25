@@ -84,10 +84,10 @@ public class PlaneControl : MonoBehaviour
         //sticky or floating throttle mechanics
         if (usingFloatingThrottle)
         {
-            usedThrottle = floatingThrottle;
+            usedThrottle = (floatingThrottle + 1) / 2;
         }
         else {
-            usedThrottle = Mathf.Clamp(usedThrottle + stickyThrottle * stickyThrottleSpeed, -1, 1);
+            usedThrottle = Mathf.Clamp(usedThrottle + stickyThrottle * stickyThrottleSpeed, 0, 1);
         }
 
         
