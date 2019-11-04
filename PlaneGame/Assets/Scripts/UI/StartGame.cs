@@ -3,24 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(UnityEngine.Networking.NetworkManager))]
+
 public class StartGame : MonoBehaviour
 {
-    public Button startButton;
     public Button hostButton;
     public Button joinButton;
 
-    public GameObject NetworkManager;
-    public Component NetworkManagerScript;
-
+    private GameObject NetworkManager;
+    private CustomNetworkManager NetworkManagerScript;
 
     // Start is called before the first frame update
     void Start()
     {
-        startButton.onClick.AddListener(startGame);
-        hostButton.onClick.AddListener(hostGame);
-        joinButton.onClick.AddListener(goToJoinMenu);
-
+        NetworkManager = GameObject.Find("NetworkManager");
         NetworkManagerScript = NetworkManager.GetComponent<CustomNetworkManager>();
+        hostButton.onClick.AddListener(hostGame);
+        joinButton.onClick.AddListener(joinGame);
     }
 
     // Update is called once per frame
@@ -29,18 +28,14 @@ public class StartGame : MonoBehaviour
         
     }
 
-    void startGame()
-    {
-        NetworkManagerScript.StartHost();
-    }
-
     void hostGame()
     {
+        NetworkManagerScript.StartHost();
 
     }
 
-    void goToJoinMenu()
+    void joinGame()
     {
-
+        NetworkManagerScript.StartClient();
     }
 }
