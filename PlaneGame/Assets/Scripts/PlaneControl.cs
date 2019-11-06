@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class PlaneControl : MonoBehaviour
+public class PlaneControl : NetworkBehaviour
 {
     //parent vars
     private Rigidbody rb;
@@ -54,6 +55,11 @@ public class PlaneControl : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         GetControl();
 
         ApplyForce();
