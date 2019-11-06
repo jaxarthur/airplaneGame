@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Networking;
 
 [RequireComponent(typeof(UnityEngine.Networking.NetworkManager))]
 
@@ -34,6 +35,7 @@ public class StartGame : MonoBehaviour
 
     void hostGame()
     {
+        NetworkServer.Reset();
         NetworkManagerScript.StartHost();
 
     }
@@ -43,7 +45,6 @@ public class StartGame : MonoBehaviour
         NetworkManagerScript.networkAddress = ipIn.text;
         NetworkManagerScript.StartClient();
     }
-
 
 }
 
