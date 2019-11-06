@@ -6,7 +6,9 @@ using UnityEngine.Networking;
 public class PlaneControl : NetworkBehaviour
 {
     //parent vars
+    [SyncVar]
     private Rigidbody rb;
+    [SyncVar]
     private GameObject prop;
 
 
@@ -26,8 +28,11 @@ public class PlaneControl : NetworkBehaviour
     private bool usingFloatingThrottle;
 
     //engine vars
+    [SyncVar]
     public float maxEngineSpeed;
+    [SyncVar]
     public float maxForce;
+    [SyncVar]
     public float propSpeed;
 
     //control surface vars
@@ -42,7 +47,9 @@ public class PlaneControl : NetworkBehaviour
     public float noseLiftLimit;
 
     //working vars
+    [SyncVar]
     public Vector3 curVelocity;
+    [SyncVar]
     public Vector3 curRotation;
 
     // Start is called before the first frame update
