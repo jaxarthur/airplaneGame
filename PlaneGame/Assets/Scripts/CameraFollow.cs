@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public GameObject player;
+    private GameObject player;
     public Vector3 positionOffset;
     public Vector3 rotationOffset;
 
@@ -27,5 +27,10 @@ public class CameraFollow : MonoBehaviour
 
         newRot = player.transform.rotation * Quaternion.Euler(rotationOffset);
         transform.rotation = Quaternion.Lerp(transform.rotation, newRot, rotSpeed);
+    }
+
+    public void setPlayer(GameObject newPlayer)
+    {
+        player = newPlayer;
     }
 }

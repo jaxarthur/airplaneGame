@@ -62,11 +62,22 @@ public class PlaneControl : NetworkBehaviour
     [SyncVar]
     public Vector3 curRotation;
 
+    //camera vars
+    private CameraFollow cam;
+
     // Start is called before the first frame update
     void Start()
     {
-       rb = gameObject.GetComponent<Rigidbody>();
+        rb = gameObject.GetComponent<Rigidbody>();
         prop = gameObject.transform.Find("prop").gameObject;
+
+        if (isLocalPlayer)
+        {
+            cam = GameObject.Find("MainCamera").GetComponent<CameraFollow>();
+
+            cam.setPlayer(gameObject);
+
+        }
     }
 
     // Update is called once per frame
