@@ -11,8 +11,8 @@ InputManager:
     descriptiveNegativeName: 
     negativeButton: left
     positiveButton: right
-    altNegativeButton: q
-    altPositiveButton: e
+    altNegativeButton: a
+    altPositiveButton: d
     gravity: 3
     dead: 0.001
     sensitivity: 3
@@ -345,8 +345,8 @@ InputManager:
     m_Name: Yaw
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: a
-    positiveButton: d
+    negativeButton: q
+    positiveButton: e
     altNegativeButton: 
     altPositiveButton: 
     gravity: 3

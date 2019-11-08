@@ -163,7 +163,7 @@ MonoBehaviour:
   propSpeed: 100
   maxPitchForce: 1
   maxRollForce: 1
-  maxYawForce: 1
+  maxYawForce: 0.5
   maxLiftForce: 9800
   liftForceRatio: 1000
   noseLiftAmount: 0.001
@@ -202,7 +202,7 @@ MonoBehaviour:
     i14: 0
     i15: 0
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &1341022255866106426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,10 +216,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 3
-  m_SendInterval: 0.1
+  m_SendInterval: 0.06666667
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
-  m_SyncSpin: 0
+  m_SyncSpin: 1
   m_MovementTheshold: 0.001
   m_VelocityThreshold: 0.0001
   m_SnapThreshold: 5
