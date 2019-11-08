@@ -13,18 +13,28 @@ public class PlaneControl : NetworkBehaviour
 
 
     //input vars
+    [SyncVar]
     private float pitch;
+    [SyncVar]
     private float roll;
+    [SyncVar]
     private float yaw;
     private float fire0;
     private float fire1;
     private float fire2;
+    [SyncVar]
     private float stickyThrottle;
+    [SyncVar]
     private float floatingThrottle;
+    [SyncVar]
     private float lastStickyThrottle;
+    [SyncVar]
     private float lastFloatingThrottle;
+    [SyncVar]
     public float stickyThrottleSpeed;
+    [SyncVar]
     private float usedThrottle;
+    [SyncVar]
     private bool usingFloatingThrottle;
 
     //engine vars
