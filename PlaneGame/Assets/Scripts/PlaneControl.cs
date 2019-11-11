@@ -61,6 +61,10 @@ public class PlaneControl : NetworkBehaviour
     public Vector3 curVelocity;
     [SyncVar]
     public Vector3 curRotation;
+    [SyncVar]
+    public float weapon1CoolDown;
+    private float weapon1CoolDownTimer;
+    public GameObject bulletGameObject;
 
     //camera vars
     private CameraFollow cam;
@@ -91,6 +95,8 @@ public class PlaneControl : NetworkBehaviour
         GetControl();
 
         ApplyForce();
+
+        WeaponControl();
     }
 
     private void GetControl()
@@ -159,4 +165,25 @@ public class PlaneControl : NetworkBehaviour
         }
 
     }
+
+    private void WeaponControl()
+    {
+        if (fire0 > .1 && weapon1CoolDownTimer < 0)
+        {
+            weapon1CoolDownTimer = weapon1CoolDown;
+
+            spawnBullet();
+
+        }
+        weapon1CoolDownTimer -= Time.deltaTime;
+    }
+
+    [Command]
+    void spawnBullet()
+    {
+        var bullet = Instantiate(bulletGameObject, transform.position + transform.forward * 10, transform.rotation);
+
+        NetworkServer.Spawn(bullet);
+    }
+
 }

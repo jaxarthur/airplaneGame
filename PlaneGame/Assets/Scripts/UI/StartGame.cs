@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(UnityEngine.Networking.NetworkManager))]
 
@@ -37,6 +38,7 @@ public class StartGame : MonoBehaviour
     {
         NetworkServer.Reset();
         NetworkManagerScript.StartHost();
+        unloadMenu();
 
     }
 
@@ -44,6 +46,12 @@ public class StartGame : MonoBehaviour
     {
         NetworkManagerScript.networkAddress = ipIn.text;
         NetworkManagerScript.StartClient();
+        unloadMenu();
+    }
+
+    void unloadMenu()
+    {
+        SceneManager.UnloadSceneAsync("Menu");
     }
 
 }

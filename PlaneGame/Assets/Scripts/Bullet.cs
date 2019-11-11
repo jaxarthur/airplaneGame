@@ -27,8 +27,8 @@ public class Bullet : MonoBehaviour
         for (var i=0; i < hitColliders.Length; i++)
         {
             var hitCollider = hitColliders[i];
-
-            var hitRB = hitCollider.gameObject.GetComponent<Rigidbody>();
+            
+            var hitRB = hitCollider.gameObject.GetComponentInParent<Rigidbody>();
 
             if (hitRB != null && hitCollider.gameObject != gameObject) {
                 hitRB.AddExplosionForce(expForce, transform.position, expRadius);
