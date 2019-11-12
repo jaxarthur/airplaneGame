@@ -8,6 +8,8 @@ public class Bullet : MonoBehaviour
     public float speed;
     public float expForce;
     public float expRadius;
+    public float TimeToLive;
+    private float TimeAlive;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +21,13 @@ public class Bullet : MonoBehaviour
     void FixedUpdate()
     {
         transform.Translate(Vector3.forward * speed, Space.Self);
+
+        TimeAlive += Time.deltaTime;
+
+        if (TimeAlive > TimeToLive)
+        {
+            destroySelf();
+        }
     }
 
     private void OnTriggerEnter(Collider other)

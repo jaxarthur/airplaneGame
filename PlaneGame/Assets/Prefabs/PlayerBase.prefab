@@ -87,7 +87,7 @@ MonoBehaviour:
   noseLiftLimit: 15
   curVelocity: {x: 0, y: 0, z: 0}
   curRotation: {x: 0, y: 0, z: 0}
-  weapon1CoolDown: 1
+  weapon1CoolDown: 0.05
   bulletGameObject: {fileID: 8953565635779331454, guid: 124a6ea92225645aeadb29a35bac801b,
     type: 3}
 --- !u!114 &5857086517707887139

@@ -124,9 +124,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65e0c4c231f9c4ca78315ff6d523c7d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 3
   expForce: 10000000
-  expRadius: 1000
+  expRadius: 10
+  TimeToLive: 20
 --- !u!114 &1909384039162782480
 MonoBehaviour:
   m_ObjectHideFlags: 0
