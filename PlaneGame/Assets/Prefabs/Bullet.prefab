@@ -125,8 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  expForce: 50000000
-  expRadius: 100
+  damage: 100
   TimeToLive: 20
 --- !u!114 &1909384039162782480
 MonoBehaviour:

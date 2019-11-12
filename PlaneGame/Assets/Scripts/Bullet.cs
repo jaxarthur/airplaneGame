@@ -6,8 +6,7 @@ using UnityEngine.Networking;
 public class Bullet : MonoBehaviour
 {
     public float speed;
-    public float expForce;
-    public float expRadius;
+    public float damage;
     public float TimeToLive;
     private float TimeAlive;
 
@@ -34,19 +33,7 @@ public class Bullet : MonoBehaviour
     {
         if (other.gameObject.GetComponentInParent<Rigidbody>() != null)
         {
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position, expRadius);
-
-            for (var i = 0; i < hitColliders.Length; i++)
-            {
-                var hitCollider = hitColliders[i];
-
-                var hitRB = hitCollider.gameObject.GetComponentInParent<Rigidbody>();
-
-                if (hitRB != null && hitCollider.gameObject != gameObject)
-                {
-                    hitRB.AddExplosionForce(expForce, transform.position, expRadius);
-                }
-            }
+            other.gameObject.GetComponentInParent<PlaneControl>().health -= damage;
         }
         destroySelf();
     }

@@ -66,6 +66,12 @@ public class PlaneControl : NetworkBehaviour
     private float weapon1CoolDownTimer;
     public GameObject bulletGameObject;
 
+    //health vars
+    [SyncVar]
+    public float health;
+    public float maxHealth;
+    public float healthRegen;
+
     //camera vars
     private CameraFollow cam;
 
@@ -80,6 +86,8 @@ public class PlaneControl : NetworkBehaviour
             cam = GameObject.Find("MainCamera").GetComponent<CameraFollow>();
 
             cam.setPlayer(gameObject);
+
+            respawnHealth();
 
         }
     }
@@ -97,6 +105,8 @@ public class PlaneControl : NetworkBehaviour
         ApplyForce();
 
         WeaponControl();
+
+        HealthControl();
     }
 
     private void GetControl()
@@ -176,6 +186,26 @@ public class PlaneControl : NetworkBehaviour
 
         }
         weapon1CoolDownTimer -= Time.deltaTime;
+    }
+
+    private void HealthControl()
+    {
+        if (health < 0)
+        {
+            transform.position = new Vector3(0, 5, 0);
+            transform.rotation = Quaternion.identity;
+            respawnHealth();
+        }
+
+        if (health < maxHealth)
+        {
+            health += healthRegen * Time.deltaTime;
+        }
+    }
+
+    private void respawnHealth()
+    {
+        health = maxHealth;
     }
 
     [Command]
