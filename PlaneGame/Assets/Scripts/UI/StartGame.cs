@@ -36,21 +36,23 @@ public class StartGame : MonoBehaviour
 
     void hostGame()
     {
+        unloadMenu();
         NetworkServer.Reset();
         NetworkManagerScript.StartHost();
-        unloadMenu();
 
     }
 
     void joinGame()
     {
+        unloadMenu();
         NetworkManagerScript.networkAddress = ipIn.text;
         NetworkManagerScript.StartClient();
-        unloadMenu();
     }
 
     void unloadMenu()
     {
+        Debug.Log("Unloading Menu");
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("Game"));
         SceneManager.UnloadSceneAsync("Menu");
     }
 

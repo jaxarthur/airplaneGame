@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class Bullet : MonoBehaviour
 {
@@ -34,5 +35,12 @@ public class Bullet : MonoBehaviour
                 hitRB.AddExplosionForce(expForce, transform.position, expRadius);
             }
         }
+        destroySelf();
+    }
+
+    [Command]
+    private void destroySelf()
+    {
+        NetworkServer.Destroy(gameObject);
     }
 }
