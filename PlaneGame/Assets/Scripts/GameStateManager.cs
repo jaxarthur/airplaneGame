@@ -2,20 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class GameStateManager : NetworkBehaviour
 {
     private IReadOnlyCollection<NetworkConnection> connections;
-    private List<NetworkConnection> trackedConnections;
+    private List<NetworkConnection> trackedConnections = new List<NetworkConnection>();
 
     [SyncVar]
-    public List<CustomPlayer> players;
+    public List<CustomPlayer> players = new List<CustomPlayer>();
+
+    private Transform canvas;
+    private List<Transform> scoreBoardTiles = new List<Transform>();
+
+    public 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (isClient)
+        {
+            canvas = GameObject.Find("ScoreBoard").transform;
+        }
     }
 
     // Update is called once per frame
@@ -38,9 +46,8 @@ public class GameStateManager : NetworkBehaviour
         connections = NetworkServer.connections;
         trackedConnections = new List<NetworkConnection> { };
 
-        for (var i=0; i < players.Count; i++)
+        foreach (CustomPlayer player in players)
         {
-            CustomPlayer player = players[i];
             trackedConnections.Add(player.connection);
         }
 
@@ -54,12 +61,32 @@ public class GameStateManager : NetworkBehaviour
 
         foreach(NetworkConnection connection in trackedConnections)
         {
-            
+            var removeConnection = true;
+
+            foreach(NetworkConnection other in connections)
+            {
+                if (connection == other)
+                {
+                    removeConnection = false;
+                }
+            }
+
+            if (removeConnection)
+            {
+                RemovePlayer(connection);
+            }
         }
     }
 
     void ClientManagment()
     {
+        scoreBoardTiles = new List<Transform>();
+        //Score Board Managment
+        for (int i = 0; i < canvas.childCount; i++)
+        {
+            scoreBoardTiles.Add(canvas.GetChild(i));
+        }
+
 
     }
 
