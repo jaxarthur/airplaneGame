@@ -7,6 +7,7 @@ using UnityEngine.UI;
 public class GameStateManager : NetworkBehaviour
 {
     private IReadOnlyCollection<NetworkConnection> connections;
+    [SyncVar]
     private List<NetworkConnection> trackedConnections = new List<NetworkConnection>();
 
     [SyncVar]
@@ -15,7 +16,7 @@ public class GameStateManager : NetworkBehaviour
     private Transform canvas;
     private List<Transform> scoreBoardTiles = new List<Transform>();
 
-    public 
+    public GameObject ScoreTileObject;
 
     // Start is called before the first frame update
     void Start()
@@ -84,8 +85,23 @@ public class GameStateManager : NetworkBehaviour
         //Score Board Managment
         for (int i = 0; i < canvas.childCount; i++)
         {
-            scoreBoardTiles.Add(canvas.GetChild(i));
+            var child = canvas.GetChild(i);
+
+            if (child.GetComponent<ScoreTileManager>() != null)
+            {
+                scoreBoardTiles.Add(child);
+            }
         }
+
+        foreach(Transform ScoreTile in scoreBoardTiles)
+        {
+            if (!trackedConnections.Contains(ScoreTile.GetComponent<ScoreTileManager>().conn))
+            {
+                RemoveScoreTile(ScoreTile);
+            }
+        }
+
+
 
 
     }
@@ -115,6 +131,19 @@ public class GameStateManager : NetworkBehaviour
             players.RemoveAt(positionsInList[i - amountRemoved]);
             amountRemoved += 1;
         }
+    }
+
+    void AddScoreTile(NetworkConnection conn)
+    {
+        var obj = Instantiate(ScoreTileObject);
+
+        obj.transform.SetParent(canvas);
+        obj.GetComponent<ScoreTileManager>().conn = conn;
+    }
+
+    void RemoveScoreTile(Transform tile)
+    {
+        Destroy(tile);
     }
 }
 
