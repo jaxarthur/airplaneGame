@@ -18,6 +18,10 @@ public class GameStateManager : NetworkBehaviour
 
     public GameObject ScoreTileObject;
 
+    public int topSpacing;
+    public int leftSpacing;
+    public int seperation;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -101,9 +105,23 @@ public class GameStateManager : NetworkBehaviour
             }
         }
 
+        foreach (NetworkConnection connection in trackedConnections)
+        {
+            var addConnection = true;
 
+            foreach (Transform ScoreTile in scoreBoardTiles)
+            {
+                if (ScoreTile.GetComponent<ScoreTileManager>().conn == connection)
+                {
+                    addConnection = false;
+                }
+            }
 
-
+            if (addConnection)
+            {
+                AddScoreTile(connection);
+            }
+        }
     }
 
     void AddPlayer(NetworkConnection connection)
@@ -136,9 +154,16 @@ public class GameStateManager : NetworkBehaviour
     void AddScoreTile(NetworkConnection conn)
     {
         var obj = Instantiate(ScoreTileObject);
-
+        var trans = obj.GetComponent<RectTransform>();
+        var script = obj.GetComponent<ScoreTileManager>();
+        
         obj.transform.SetParent(canvas);
-        obj.GetComponent<ScoreTileManager>().conn = conn;
+        trans.anchoredPosition = new Vector3(leftSpacing, -(topSpacing + seperation * scoreBoardTiles.Count), 0);
+
+        script.conn = conn;
+        script.playerName = "HelloWorld!";
+        script.updateScore();
+
     }
 
     void RemoveScoreTile(Transform tile)

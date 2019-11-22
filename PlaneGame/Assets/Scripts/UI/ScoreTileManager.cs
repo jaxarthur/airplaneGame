@@ -16,15 +16,15 @@ public class ScoreTileManager : MonoBehaviour
 
     public NetworkConnection conn;
 
-    void updateScore()
+    public void updateScore()
     {
         var outputString = "";
 
-        outputString = outputString.Insert(-1, padString(playerPlace.ToString(), placeMaxLen));
-        outputString = outputString.Insert(-1, " ");
-        outputString = outputString.Insert(-1, padString(playerName, nameMaxLen));
-        outputString = outputString.Insert(-1, " ");
-        outputString = outputString.Insert(-1, padString(playerScore.ToString(), scoreMaxLen));
+        outputString = outputString.Insert(outputString.Length, padString(playerPlace.ToString(), placeMaxLen));
+        outputString = outputString.Insert(outputString.Length, " ");
+        outputString = outputString.Insert(outputString.Length, padString(playerName, nameMaxLen));
+        outputString = outputString.Insert(outputString.Length, " ");
+        outputString = outputString.Insert(outputString.Length, padString(playerScore.ToString(), scoreMaxLen));
 
         gameObject.GetComponentInChildren<Text>().text = outputString;
     }

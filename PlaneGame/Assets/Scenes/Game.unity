@@ -670,7 +670,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1ada2477d0d84fa6a354bc5dbee2666, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ScoreTileObject: {fileID: 0}
+  ScoreTileObject: {fileID: 1712047038361483783, guid: 5e3b0765b76a145cf852c9f5dd60f1f2,
+    type: 3}
+  topSpacing: 50
+  leftSpacing: 30
+  seperation: 50
 --- !u!114 &1690299050
 MonoBehaviour:
   m_ObjectHideFlags: 0
