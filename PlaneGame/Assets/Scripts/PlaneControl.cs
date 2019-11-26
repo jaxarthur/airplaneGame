@@ -212,7 +212,7 @@ public class PlaneControl : NetworkBehaviour
     void spawnBullet()
     {
         var bullet = Instantiate(bulletGameObject, transform.position + transform.forward * 10, transform.rotation);
-
+        bullet.GetComponent<Bullet>().owner = connectionToClient;
         NetworkServer.Spawn(bullet);
     }
 

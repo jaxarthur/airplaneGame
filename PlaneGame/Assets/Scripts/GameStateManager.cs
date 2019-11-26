@@ -4,14 +4,46 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
+public struct CustomPlayer
+{
+    public int connection;
+    public string name;
+    public int kills;
+    public int deaths;
+    public int score;
+
+    public CustomPlayer(NetworkConnection connection)
+    {
+        this.connection = connection.connectionId;
+        this.name = "";
+        this.kills = 0;
+        this.deaths = 0;
+        this.score = 0;
+    }
+}
+
+public class PlayersSynced : SyncListStruct<CustomPlayer>{}
+
+public struct NetworkContainer
+{
+    public int connection;
+
+    public NetworkContainer(NetworkConnection connection)
+    {
+        this.connection = connection.connectionId;
+    }
+}
+
+public class NetworkSynced : SyncListStruct<NetworkContainer> {}
+
+
 public class GameStateManager : NetworkBehaviour
 {
     private IReadOnlyCollection<NetworkConnection> connections;
-    [SyncVar]
     private List<NetworkConnection> trackedConnections = new List<NetworkConnection>();
 
     [SyncVar]
-    public List<CustomPlayer> players = new List<CustomPlayer>();
+    public PlayersSynced players = new PlayersSynced();
 
     private Transform canvas;
     private List<Transform> scoreBoardTiles = new List<Transform>();
@@ -86,6 +118,7 @@ public class GameStateManager : NetworkBehaviour
     void ClientManagment()
     {
         scoreBoardTiles = new List<Transform>();
+        
         //Score Board Managment
         for (int i = 0; i < canvas.childCount; i++)
         {
@@ -172,25 +205,3 @@ public class GameStateManager : NetworkBehaviour
     }
 }
 
-public class CustomPlayer
-{
-    [SyncVar]
-    public NetworkConnection connection;
-    [SyncVar]
-    public string name;
-    [SyncVar]
-    public int kills;
-    [SyncVar]
-    public int deaths;
-    [SyncVar]
-    public int score;
-
-    public CustomPlayer(NetworkConnection newconnection)
-    {
-        connection = newconnection;
-        name = "placeholder";
-        kills = 0;
-        deaths = 0;
-        score = 0;
-    }
-}
