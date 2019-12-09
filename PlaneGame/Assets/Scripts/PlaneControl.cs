@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class PlaneControl : NetworkBehaviour
 {
@@ -37,6 +38,7 @@ public class PlaneControl : NetworkBehaviour
     [SyncVar]
     private bool usingFloatingThrottle;
 
+    private Slider slider;
     //engine vars
     [SyncVar]
     public float maxEngineSpeed;
@@ -75,11 +77,17 @@ public class PlaneControl : NetworkBehaviour
     //camera vars
     private CameraFollow cam;
 
+    //color var
+    public Color bodyColor;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody>();
         prop = gameObject.transform.Find("prop").gameObject;
+
+        //color
+        transform.Find("body").GetComponent<MeshRenderer>().materials[0].color = bodyColor;
 
         if (isLocalPlayer)
         {
@@ -88,6 +96,8 @@ public class PlaneControl : NetworkBehaviour
             cam.setPlayer(gameObject);
 
             respawnHealth();
+
+            slider = GameObject.Find("/HUD/Throttle").GetComponent<Slider>();
 
         }
     }
@@ -139,6 +149,8 @@ public class PlaneControl : NetworkBehaviour
         else {
             usedThrottle = Mathf.Clamp(usedThrottle + stickyThrottle * stickyThrottleSpeed, 0, 1);
         }
+
+        slider.value = usedThrottle;
 
         
     }
