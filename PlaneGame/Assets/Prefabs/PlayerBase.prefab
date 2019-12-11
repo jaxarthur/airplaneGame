@@ -93,6 +93,7 @@ MonoBehaviour:
   health: 4
   maxHealth: 200
   healthRegen: 2
+  bodyColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &5857086517707887139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,8 +242,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: f60fb94c5058a4aeea8de4636fbda6dd, type: 2}
-  - {fileID: 2100000, guid: 4accb1fdce21046499b95927af6ee151, type: 2}
   - {fileID: 2100000, guid: 13e3d3095ddd6474fae39c0de137fbb3, type: 2}
+  - {fileID: 2100000, guid: 4accb1fdce21046499b95927af6ee151, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

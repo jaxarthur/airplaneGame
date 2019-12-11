@@ -87,7 +87,9 @@ public class PlaneControl : NetworkBehaviour
         prop = gameObject.transform.Find("prop").gameObject;
 
         //color
-        transform.Find("body").GetComponent<MeshRenderer>().materials[0].color = bodyColor;
+        var props = new MaterialPropertyBlock();
+        props.SetColor("_BaseColor", bodyColor);
+        transform.Find("body").GetComponent<MeshRenderer>().SetPropertyBlock(props,0);
 
         if (isLocalPlayer)
         {
