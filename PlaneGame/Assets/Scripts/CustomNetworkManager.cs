@@ -6,6 +6,10 @@ using UnityEngine.Events;
 using UnityEngine.Networking;
 public class CustomNetworkManager : NetworkManager
 {
+    public override void OnClientConnect(NetworkConnection conn)
+    {
+        ClientScene.AddPlayer(conn, 0);
+    }
 
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
