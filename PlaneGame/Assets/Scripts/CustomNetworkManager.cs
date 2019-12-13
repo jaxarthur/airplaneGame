@@ -8,7 +8,6 @@ public class CustomNetworkManager : NetworkManager
 {
     public override void OnClientConnect(NetworkConnection conn)
     {
-        ClientScene.Ready(conn);
 
         ClientScene.AddPlayer(conn, 0);
         Debug.Log("Added Player");
