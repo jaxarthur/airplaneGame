@@ -78,6 +78,7 @@ public class PlaneControl : NetworkBehaviour
     private CameraFollow cam;
 
     //color var
+    [SyncVar]
     public Color bodyColor;
 
     // Start is called before the first frame update
@@ -196,7 +197,7 @@ public class PlaneControl : NetworkBehaviour
         {
             weapon1CoolDownTimer = weapon1CoolDown;
 
-            spawnBullet();
+            CmdspawnBullet();
 
         }
         weapon1CoolDownTimer -= Time.deltaTime;
@@ -223,7 +224,7 @@ public class PlaneControl : NetworkBehaviour
     }
 
     [Command]
-    void spawnBullet()
+    void CmdspawnBullet()
     {
         var bullet = Instantiate(bulletGameObject, transform.position + transform.forward * 10, transform.rotation);
         bullet.GetComponent<Bullet>().owner = connectionToClient;
