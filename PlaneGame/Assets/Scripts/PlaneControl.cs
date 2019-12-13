@@ -223,7 +223,7 @@ public class PlaneControl : NetworkBehaviour
         health = maxHealth;
     }
 
-    [Command]
+    [Command(channel=2)]
     void CmdspawnBullet()
     {
         var bullet = Instantiate(bulletGameObject, transform.position + transform.forward * 10, transform.rotation);

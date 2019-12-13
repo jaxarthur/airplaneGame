@@ -93,7 +93,7 @@ MonoBehaviour:
   health: 4
   maxHealth: 200
   healthRegen: 2
-  bodyColor: {r: 0, g: 0, b: 0, a: 0}
+  bodyColor: {r: 1, g: 1, b: 1, a: 0}
 --- !u!114 &5857086517707887139
 MonoBehaviour:
   m_ObjectHideFlags: 0
