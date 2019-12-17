@@ -182,7 +182,7 @@ public class PlaneControl : NetworkBehaviour
         {
             weapon1CoolDownTimer = weapon1CoolDown;
 
-            CmdSpawnBullet();
+            CmdSpawnBullet(bulletGameObject);
 
         }
         weapon1CoolDownTimer -= Time.deltaTime;
@@ -209,11 +209,14 @@ public class PlaneControl : NetworkBehaviour
     }
 
     [Command]
-    void CmdSpawnBullet()
+    void CmdSpawnBullet(GameObject thing)
     {
-        var bullet = Instantiate(bulletGameObject, transform.position + transform.forward * 10, transform.rotation);
+        if (isServer)
+        {
+            var bullet = Instantiate(thing, transform.position + transform.forward * 10, transform.rotation);
 
-        NetworkServer.Spawn(bullet);
+            NetworkServer.Spawn(bullet);
+        }
     }
 
 }
