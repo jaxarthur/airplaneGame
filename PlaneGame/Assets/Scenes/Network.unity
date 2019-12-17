@@ -199,8 +199,8 @@ MonoBehaviour:
   m_GlobalConfig:
     m_ThreadAwakeTimeout: 1
     m_ReactorModel: 0
-    m_ReactorMaximumReceivedMessages: 1024
-    m_ReactorMaximumSentMessages: 1024
+    m_ReactorMaximumReceivedMessages: 10240
+    m_ReactorMaximumSentMessages: 10240
     m_MaxPacketSize: 2000
     m_MaxHosts: 16
     m_ThreadPoolSize: 1

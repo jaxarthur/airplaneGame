@@ -182,7 +182,7 @@ public class PlaneControl : NetworkBehaviour
         {
             weapon1CoolDownTimer = weapon1CoolDown;
 
-            spawnBullet();
+            CmdSpawnBullet();
 
         }
         weapon1CoolDownTimer -= Time.deltaTime;
@@ -209,7 +209,7 @@ public class PlaneControl : NetworkBehaviour
     }
 
     [Command]
-    void spawnBullet()
+    void CmdSpawnBullet()
     {
         var bullet = Instantiate(bulletGameObject, transform.position + transform.forward * 10, transform.rotation);
 
