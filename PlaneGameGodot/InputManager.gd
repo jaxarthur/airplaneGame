@@ -23,10 +23,11 @@ var throttleIn: float = 0
 var throttleInUp: bool = false
 var throttleInDown: bool = false
 var throttleInSticky: float = 0
-var throttleInStickySpeed: float = .001
+var throttleInStickySpeed: float = .01
 var throttleInAxis: float = 0
 var throttleInAxisLast: float = 0
 var throttleInAxisUse: bool = false
+
 
 func update_input():
 	update_input_pitch()
@@ -38,18 +39,17 @@ func update_input_pitch():
 	pitchInUp = Input.is_action_pressed("pitch_up")
 	pitchInDown = Input.is_action_pressed("pitch_down")
 	pitchInAxis = Input.get_action_strength("pitch")
-	
-	if (pitchInUp or pitchInDown):
-		if (pitchInUp and not pitchInDown):
+	if pitchInUp or pitchInDown:
+		if pitchInUp and not pitchInDown:
 			pitchIn = 1
 		
-		elif (pitchInDown and not pitchInDown):
+		elif pitchInDown and not pitchInUp:
 			pitchIn = -1
 		
 		else:
 			pitchIn = 0
 	
-	elif (pitchInAxis != 0):
+	elif [pitchInAxis != 0]:
 		pitchIn = pitchInAxis
 	
 	else:
@@ -60,17 +60,17 @@ func update_input_roll():
 	rollInLeft = Input.is_action_pressed("roll_left")
 	rollInAxis = Input.get_action_strength("roll")
 	
-	if (rollInRight or rollInLeft):
-		if (rollInRight and not rollInLeft):
+	if rollInRight or rollInLeft:
+		if rollInRight and not rollInLeft:
 			rollIn = 1
 		
-		elif (rollInLeft and not rollInRight):
+		elif rollInLeft and not rollInRight:
 			rollIn = -1
 		
 		else:
 			rollIn = 0
 	
-	elif (rollInAxis != 0):
+	elif rollInAxis != 0:
 		rollIn = rollInAxis
 	
 	else:
@@ -81,17 +81,17 @@ func update_input_yaw():
 	yawInLeft = Input.is_action_pressed("yaw_left")
 	yawInAxis = Input.get_action_strength("yaw")
 	
-	if (yawInRight or yawInLeft):
-		if (yawInRight and not yawInLeft):
+	if yawInRight or yawInLeft:
+		if yawInRight and not yawInLeft:
 			yawIn = 1
 		
-		elif (yawInLeft and not yawInRight):
+		elif yawInLeft and not yawInRight:
 			yawIn = -1
 		
 		else:
 			yawIn = 0
 	
-	elif (yawInAxis != 0):
+	elif yawInAxis != 0:
 		yawIn = yawInAxis
 	
 	else:
@@ -102,22 +102,22 @@ func update_input_throttle():
 	throttleInDown = Input.is_action_pressed("throttle_down")
 	throttleInAxis = Input.get_action_strength("throttle")
 	
-	if (throttleInUp or throttleInDown):
-		if (throttleInAxisUse):
+	if throttleInUp or throttleInDown:
+		if throttleInAxisUse:
 			throttleInSticky = throttleIn
 			throttleInAxisUse = false
 		
-		if (throttleInUp and not throttleInDown):
+		if throttleInUp and not throttleInDown:
 			throttleInSticky = clamp(throttleInSticky+throttleInStickySpeed, 0, 1)
 			
-		elif (throttleInDown and not throttleInUp):
+		elif throttleInDown and not throttleInUp:
 			throttleInSticky = clamp(throttleInSticky-throttleInStickySpeed, 0, 1)
 	
-	elif (throttleInAxis != throttleInAxisLast):
+	elif throttleInAxis != throttleInAxisLast:
 		throttleInAxisUse = true
 		throttleInAxisLast = throttleInAxis
 	
-	if (throttleInAxisUse):
+	if throttleInAxisUse:
 		throttleIn = throttleInAxis
 	
 	else:
