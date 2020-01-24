@@ -1,70 +1,99 @@
 extends Control
 
 func _ready():
-	call_deferred("set_visibility")
+	call_deferred("_show_playermenu")
 
-func set_visibility():
-	_startmenu(true)
-	_joinmenu(false)
-	_panel(true)
-
-func _on_Host_pressed():
-	
-	_startmenu(false)
-	_joinmenu(false)
-	_panel(false)
-	
-	get_node("/root/Game").host()
-
-
-func _on_Join_pressed():
-	
-	_startmenu(false)
-	_joinmenu(true)
-	_panel(true)
-	
-
-
-func _on_JoinMenuJoin_pressed():
-	var _code = get_node("JoinMenu/CodeEdit").text
-	if (len(_code) == 8):
-		_startmenu(false)
-		_joinmenu(false)
-		_panel(false)
-		get_node("/root/Game").join(_code)
+#Visiblility Controls
+func _background(_bool):
+	visible = _bool
+	if _bool:
+		focus_mode = Control.FOCUS_ALL
 	else:
-		printerr("That code is incorrect")
-
-
-func _on_JoinMenuBack_pressed():
-	
-	_startmenu(true)
-	_joinmenu(false)
-	_panel(true)
+		focus_mode = Control.FOCUS_NONE
 
 func _startmenu(_bool):
-	get_node("StartMenu").visible = _bool
+	var _obj: HBoxContainer = get_node("CenterContainer/StartMenu")
+	_obj.visible = _bool
 	if _bool:
-		get_node("StartMenu").focus_mode = Control.FOCUS_ALL
+		_obj.focus_mode = Control.FOCUS_ALL
 	else:
-		get_node("StartMenu").focus_mode = Control.FOCUS_NONE
+		_obj.focus_mode = Control.FOCUS_NONE
 
 func _joinmenu(_bool):
-	get_node("JoinMenu").visible = _bool
+	var _obj: HBoxContainer = get_node("CenterContainer/JoinMenu")
+	_obj.visible = _bool
 	if _bool:
-		get_node("JoinMenu").focus_mode = Control.FOCUS_ALL
+		_obj.focus_mode = Control.FOCUS_ALL
 	else:
-		get_node("JoinMenu").focus_mode = Control.FOCUS_NONE
+		_obj.focus_mode = Control.FOCUS_NONE
 
-func _panel(_bool):
-	get_node("Panel").visible = _bool
+func _playermenu(_bool):
+	var _obj: HBoxContainer = get_node("CenterContainer/PlayerMenu")
+	_obj.visible = _bool
 	if _bool:
-		get_node("Panel").focus_mode = Control.FOCUS_ALL
+		_obj.focus_mode = Control.FOCUS_ALL
 	else:
-		get_node("Panel").focus_mode = Control.FOCUS_NONE
+		_obj.focus_mode = Control.FOCUS_NONE
 
-func _on_DebugJoin_pressed():
+#Visibility Groups
+func _hide_all():
+	_background(false)
+	_playermenu(false)
 	_startmenu(false)
 	_joinmenu(false)
-	_panel(false)
-	get_node("/root/Game").join("7f000001")
+
+func _show_background():
+	_background(true)
+
+func _show_playermenu():
+	_hide_all()
+	_show_background()
+	_playermenu(true)
+
+func _show_startmenu():
+	_hide_all()
+	_show_background()
+	_startmenu(true)
+
+func _show_joinmenu():
+	_hide_all()
+	_show_background()
+	_joinmenu(true)
+
+#External Interfaces
+func _start_host():
+	_hide_all()
+	var _name: String = get_node("CenterContainer/PlayerMenu/NameEdit").text
+	var _color: Color = get_node("CenterContainer/PlayerMenu/ColorPicker").color
+	get_node("/root/Game").host(_name, _color)
+
+func _start_client(_code):
+	_hide_all()
+	var _name: String = get_node("CenterContainer/PlayerMenu/NameEdit").text
+	var _color: Color = get_node("CenterContainer/PlayerMenu/ColorPicker").color
+	get_node("/root/Game").join(_code, _name, _color)
+
+#Signal Handlers
+func _playermenu_start():
+	var _name: String = get_node("CenterContainer/PlayerMenu/NameEdit").text
+	if _name.length() >= 3:
+		_show_startmenu()
+
+func _startmenu_host():
+	_start_host()
+
+func _startmenu_join():
+	_show_joinmenu()
+
+func _startmenu_debugjoin():
+	_start_client("7f000001")
+
+func _startmenu_back():
+	_show_playermenu()
+
+func _joinmenu_join():
+	var _code: String = get_node("CenterContainer/JoinMenu/CodeEdit").text
+	_start_client(_code)
+
+func _joinmenu_back():
+	_show_startmenu()

@@ -2,10 +2,10 @@ extends Node
 
 var camera: Camera;
 var player: RigidBody;
-var positionOffset: Vector3 = Vector3(0,2,-7)
+var positionOffset: Vector3 = Vector3(0,3,-6)
 var rotationOffset: Quat = Quat(Vector3(0,1,0),PI) * Quat(Vector3(1,0,0), -PI/8)
-var positionSpeed: float = 1
-var rotationSpeed: float = 1
+var positionSpeed: float = .9
+var rotationSpeed: float = .9
 
 var positionNew: Vector3;
 var rotationNew: Vector3;

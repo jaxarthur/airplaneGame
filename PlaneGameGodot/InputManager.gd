@@ -28,12 +28,15 @@ var throttleInAxis: float = 0
 var throttleInAxisLast: float = 0
 var throttleInAxisUse: bool = false
 
+#Fire Section
+var fireIn: bool = false
 
 func update_input():
 	update_input_pitch()
 	update_input_roll()
 	update_input_yaw()
 	update_input_throttle()
+	update_input_fire()
 
 func update_input_pitch():
 	pitchInUp = Input.is_action_pressed("pitch_up")
@@ -122,3 +125,6 @@ func update_input_throttle():
 	
 	else:
 		throttleIn = throttleInSticky
+
+func update_input_fire():
+	fireIn = Input.is_action_pressed("fire")
