@@ -3,6 +3,7 @@ extends Spatial
 var velocity: float = 2
 var ray: RayCast
 var ttl: float = 3
+var own: int
 
 func _ready():
 	ray = get_node("RayCast")
@@ -16,18 +17,18 @@ func _physics_process(delta):
 		var _collision: Object = ray.get_collider()
 		if _collision != null:
 			if(_collision.is_class("Player")):
-				get_node("/root/Game").bullet_hit(_collision)
+				get_node("/root/Game").bullet_hit(_collision, own)
 				
 			_remove_self()
 		
-	ttl = ttl - delta
+		ttl = ttl - delta
 	
-	if ttl <= 0:
-		_remove_self()
+		if ttl <= 0:
+			rpc("_remove_self")
 
 remote func _sync_pos(_pos):
 	self.global_transform = _pos
 
-func _remove_self():
+remotesync func _remove_self():
 	print("removing")
-	get_node("/root/Game").for_removal.append(self)
+	queue_free()

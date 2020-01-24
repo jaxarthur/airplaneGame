@@ -13,31 +13,28 @@ var connected: bool = false
 var bulletDamage: int = 20
 const hex: Dictionary = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "a": 10, "b": 11, "c": 12, "d": 13, "e": 14, "f": 15}
 
+var players: Node
+
+
 #Basis Funcitons
 
 func _ready():
-	#debug tests
-	ip = _get_ip()
-	print("Original IP: " + ip)
-	code = _encode(ip)
-	print("Code: " + code)
-	ip = _decode(code)
-	print("New IP: " + ip)
-	print("Test")
-	
+
 	scoreBoard = get_node("/root/Game/UI/ScoreBoardPanel/ScoreBoard")
+	players = get_node("/root/Game/Players")
 
 func _process(delta):
 	for i in for_removal:
 		i.free()
 
 	for_removal = []
-	
+
 	if (connected):
 		if (get_tree().is_network_server()):
-			
+
 			rpc_unreliable("_update_playerData", playerData)
 			rpc_unreliable("_update_scoreBoard")
+			rpc_unreliable("_update_players")
 
 #Basis Networking
 #Connect Fucntions To Events
@@ -62,7 +59,7 @@ func host(_name, _color):
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(8008, 50)
 	get_tree().set_network_peer(peer)
-	
+
 	playerData[1] = {"name": _name, "color": _color, "deaths": 0, "kills": 0}
 	rpc("add_player", 1, _name, _color, _get_spawn())
 
@@ -207,13 +204,51 @@ remotesync func _spawn_bullet_rpc(_pos, _rot, _id, _name):
 
 func bullet_hit(_obj: Object, _own: int):
 	var _id: int = int(_obj.name)
-	
+
 
 remotesync func _respawn_player(_id):
 	pass
 
 remotesync func _update_scoreBoard():
 	scoreBoard.updateBoard(playerData)
-	
+
 remote func _update_playerData(_playerdata):
 	playerData = _playerdata
+	
+
+#New Code
+Extends Node
+class_name Network
+
+var code: String
+var ip: String
+var bulNum: int = 1
+var for_removal: Array = []
+var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var PlayerName: String = "bob"
+var PlayerColor: Color = Color.red
+var playerData: Dictionary = {}
+var scoreBoard: ScoreBoard
+var connected: bool = false
+var bulletDamage: int = 20
+const hex: Dictionary = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "a": 10, "b": 11, "c": 12, "d": 13, "e": 14, "f": 15}
+
+
+func _ready():
+
+	scoreBoard = get_node("/root/Game/UI/ScoreBoardPanel/ScoreBoard")
+	players = get_node("/root/Game/Players")
+
+func _process(delta):
+	for i in for_removal:
+		i.free()
+
+	for_removal = []
+
+	if (connected):
+		if (get_tree().is_network_server()):
+
+			rpc_unreliable("_update_playerData", playerData)
+			rpc_unreliable("_update_scoreBoard")
+			rpc_unreliable("_update_players")
+
