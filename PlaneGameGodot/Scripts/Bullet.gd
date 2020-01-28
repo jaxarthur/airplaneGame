@@ -1,4 +1,5 @@
 extends Spatial
+class_name Bullet
 
 var velocity: float = 2
 var ray: RayCast
@@ -14,21 +15,21 @@ func _physics_process(delta):
 		translation = translation + (get_global_transform().basis.z*velocity)
 		rpc_unreliable("_sync_pos", get_global_transform())
 		ray.force_raycast_update()
-		var _collision: Object = ray.get_collider()
+		var _collision: PhysicsBody = ray.get_collider()
 		if _collision != null:
-			if(_collision.is_class("Player")):
-				get_node("/root/Game").bullet_hit(_collision, own)
-				
+			if(_collision.name != "StaticBody"):
+				get_node("/root/Game/Bullets").hit(_collision, own)
+			
 			_remove_self()
 		
 		ttl = ttl - delta
 	
 		if ttl <= 0:
-			rpc("_remove_self")
+			_remove_self()
 
 remote func _sync_pos(_pos):
 	self.global_transform = _pos
 
-remotesync func _remove_self():
-	print("removing")
+func _remove_self():
 	queue_free()
+	get_node("/root/Game").data["bullets"].erase(int(self.name))

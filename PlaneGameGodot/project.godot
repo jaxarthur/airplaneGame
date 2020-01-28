@@ -9,10 +9,30 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "Spatial",
+"class": "Bullet",
+"language": "GDScript",
+"path": "res://Scripts/Bullet.gd"
+}, {
+"base": "Node",
+"class": "Bullets",
+"language": "GDScript",
+"path": "res://Scripts/Bullets.gd"
+}, {
+"base": "Node",
+"class": "Network",
+"language": "GDScript",
+"path": "res://Scripts/Network3.gd"
+}, {
 "base": "RigidBody",
 "class": "Player",
 "language": "GDScript",
 "path": "res://Player.gd"
+}, {
+"base": "Node",
+"class": "Players",
+"language": "GDScript",
+"path": "res://Scripts/Players.gd"
 }, {
 "base": "VBoxContainer",
 "class": "ScoreBoard",
@@ -20,7 +40,11 @@ _global_script_classes=[ {
 "path": "res://Scripts/ScoreBoard.gd"
 } ]
 _global_script_class_icons={
+"Bullet": "",
+"Bullets": "",
+"Network": "",
 "Player": "",
+"Players": "",
 "ScoreBoard": ""
 }
 

@@ -4,7 +4,7 @@ class_name ScoreBoard
 
 func updateBoard(_playerData: Dictionary):
 	var _children: Array = get_children()
-	var _tiles: Array
+	var _tiles: Array = []
 	
 	for i in _children:
 		if i.name != "TitleBar":
@@ -36,10 +36,7 @@ func _delTiles(_playerData: Dictionary, _tiles: Array):
 				exists = true
 		
 		if (!exists):
-			_del.append(_tile)
-	
-	for _tile in _del:
-		_tile.free()
+			_tile.queue_free()
 
 func _updateTiles(_playerData: Dictionary, _tiles: Array):
 	for _key in _playerData.keys():

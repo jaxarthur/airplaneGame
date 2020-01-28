@@ -79,8 +79,7 @@ func update_fire():
 		fireTimer = fireRate
 		var _rot = rotation
 		var _pos = translation + forward * -2 + up * .8
-		get_node("/root/Game").spawn_bullet(_pos, _rot)
-		print("fire")
+		get_node("/root/Game/Bullets").spawn_client(_pos, _rot)
 		
 func rotate_prop():
 	var _prop = get_node("Prop")

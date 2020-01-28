@@ -1,56 +1,68 @@
+#New Code
 extends Node
+class_name Network
 
 var code: String
 var ip: String
-var bulNum: int = 1
-var for_removal: Array = []
-var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-var PlayerName: String = "bob"
-var PlayerColor: Color = Color.red
-var playerData: Dictionary = {}
+
+var playerName: String = "bob"
+var playerColor: Color = Color.red
+
+var data: Dictionary = {"players": {}, "bullets": []}
+var dataPrintTimer: float = 0
+
+var players: Players
 var scoreBoard: ScoreBoard
-var connected: bool = false
-var bulletDamage: int = 20
+var bullets: Bullets
+
 const hex: Dictionary = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "a": 10, "b": 11, "c": 12, "d": 13, "e": 14, "f": 15}
 
-var players: Node
-
-
-#Basis Funcitons
 
 func _ready():
+	get_tree().connect("network_peer_connected", self, "_player_connected")
+	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
+	get_tree().connect("connected_to_server", self, "_connection_good")
+	get_tree().connect("connection_failed", self, "_connection_fail")
+	get_tree().connect("server_disconnected", self, "_connection_lost")
 
 	scoreBoard = get_node("/root/Game/UI/ScoreBoardPanel/ScoreBoard")
 	players = get_node("/root/Game/Players")
+	bullets = get_node("/root/Game/Bullets")
 
 func _process(delta):
-	for i in for_removal:
-		i.free()
-
-	for_removal = []
-
-	if (connected):
+	if (get_tree().network_peer != null):
 		if (get_tree().is_network_server()):
+			rpc_unreliable("_update_clients", data)
+			dataPrintTimer += delta
+			if dataPrintTimer >= 2:
+				#print_debug(data)
+				dataPrintTimer = 0
 
-			rpc_unreliable("_update_playerData", playerData)
-			rpc_unreliable("_update_scoreBoard")
-			rpc_unreliable("_update_players")
+#Peer Events
+func _player_connected(_id):
+	if (get_tree().is_network_server()):
+		print("Adding {0}".format([_id]))
+		rpc_id(_id, "_get_playerData")
 
-#Basis Networking
-#Connect Fucntions To Events
-func _set_connectons():
-	get_tree().connect("network_peer_connected", self, "_player_connected")
-	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
-	get_tree().connect("connected_to_server", self, "_connected_ok")
-	get_tree().connect("connection_failed", self, "_connected_fail")
-	get_tree().connect("server_disconnected", self, "_server_disconnected")
+func _player_disconnected(_id):
+	if (get_tree().is_network_server()):
+		print("Removing {0}".format([_id]))
+		data["players"].erase(_id)
+		
 
-#Start as Host
+func _connection_good():
+	pass
+
+func _connection_fail():
+	_display_menu(true)
+
+func _connection_lost():
+	_display_menu(true)
+
+#Mode Calls
 func host(_name, _color):
-	PlayerName = _name
-	PlayerColor = _color
-	_set_connectons()
-	get_node("UI").focus_mode = Control.FOCUS_NONE
+	playerName = _name
+	playerColor = _color
 
 	ip = _get_ip()
 	code = _encode(ip)
@@ -59,77 +71,33 @@ func host(_name, _color):
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_server(8008, 50)
 	get_tree().set_network_peer(peer)
+	_get_playerData()
 
-	playerData[1] = {"name": _name, "color": _color, "deaths": 0, "kills": 0}
-	rpc("add_player", 1, _name, _color, _get_spawn())
-
-#Start as Client
 func join(_code, _name, _color):
-	PlayerName = _name
-	PlayerColor = _color
-	_set_connectons()
+	playerName = _name
+	playerColor = _color
 
 	code = _code
 	ip = _decode(code)
-	print(ip)
 	_set_code_display()
 
 	var peer = NetworkedMultiplayerENet.new()
 	peer.create_client(ip, 8008)
 	get_tree().set_network_peer(peer)
 
-func _player_connected(id):
-	if (get_tree().get_network_unique_id() == id):
-		if (get_tree().is_network_server()):
-			_player_connected_server(id, PlayerName, PlayerColor)
-		else:
-			rpc_id(1, "_player_connected_server", id, PlayerName, PlayerColor)
-
-remote func _player_connected_server(id, _name, _color):
-	playerData[id] = {"name": _name, "color": _color, "deaths": 0, "kills": 0, "health": 100}
+remotesync func _get_playerData():
+	var _id: int = get_tree().get_network_unique_id()
+	
 	if (get_tree().is_network_server()):
-		rpc_id(id, "add_player", 1, playerData[1]["name"], playerData[1]["color"], Transform.IDENTITY)
-		for i in get_tree().get_network_connected_peers():
-			if i != id:
-				print("adding" + str(i))
-				rpc_id(id, "add_player", i, playerData[i]["name"], playerData[i]["color"], Transform.IDENTITY)
+		_add_playerData(_id, playerName, playerColor)
+	else:
+		rpc_id(1, "_add_playerData", _id, playerName, playerColor)
 
-		rpc("add_player", id, _name, _color, _get_spawn())
-
-func _player_disconnected(id):
+remotesync func _add_playerData(_id: int, _name: String, _color: Color):
 	if (get_tree().is_network_server()):
-		rpc("remove_player", id)
-		playerData.erase(id)
+		data["players"][_id] = {"name": _name, "color": _color, "deaths": 0, "kills": 0, "health": 0}
 
-func _connected_ok():
-	_player_connected(get_tree().get_network_unique_id())
-	_unload_menu()
-	self.set_network_master(1)
-	print("Connection Sucsessful")
-
-func _server_disconnected():
-	_load_menu()
-	_display_menu()
-	print("Connection Terminated")
-
-func _connected_fail():
-	print("Failed To Connect")
-	_display_menu()
-
-remotesync func add_player(id, _name, _color, pos):
-	connected = true
-	var player = preload("res://Player.tscn").instance()
-	print(id)
-	player.set_name(str(id))
-	player.PlayerName = _name
-	player.PlayerColor = _color
-	player.set_network_master(id)
-	player.global_transform = pos
-	get_node("./Players").add_child(player)
-
-remotesync func remove_player(id):
-	get_node("/root/Game/Players/"+str(id)).free()
-
+#IP Functions
 func _decode(_code: String):
 	_code = _code.to_lower()
 	var _ip = ""
@@ -159,96 +127,19 @@ func _get_ip() -> String:
 		if i != "127.0.0.1" and i.find(":") < 0:
 			print_debug(i)
 			return i
-	return ""
+	return "0.0.0.0"
 
 func _set_code_display():
 	get_node("/root/Game/UI/CodeDisplay").text = "Code: {0}".format([code])
 
-func _display_menu():
-	get_node("/root/Game/Menu").set_visibility()
-
-func _load_menu():
-	var menu = preload("res://Menu.tscn").instance()
-	self.add_child(menu)
-
-func _unload_menu():
-	get_node("./Menu").free()
-
-func _get_spawn():
-	var spawns: Array = get_node("./World/SpawnPoints").get_children()
-	rng.randomize()
-	var rand: int = rng.randi_range(0, len(spawns)-1)
-	var trans: Transform = spawns[rand].global_transform
-	print(trans)
-	return trans
-
-func spawn_bullet(_pos, _rot):
-	if (get_tree().is_network_server()):
-		_spawn_bullet_server(_pos, _rot, 1)
+func _display_menu(_bool: bool):
+	var _menu: Control = get_node("/root/Game/Menu")
+	if _bool:
+		_menu.show()
 	else:
-		rpc_unreliable_id(1, "_spawn_bullet_server", _pos, _rot, get_tree().get_network_unique_id())
+		_menu.hide()
 
-remotesync func _spawn_bullet_server(_pos, _rot, _id):
-	rpc_unreliable("_spawn_bullet_rpc", _pos, _rot, _id, str(bulNum))
-	bulNum += 1
-
-remotesync func _spawn_bullet_rpc(_pos, _rot, _id, _name):
-	var bullet: Object = preload("res://Bullet.tscn").instance()
-	bullet.set_name(_name)
-	bullet.set_network_master(1)
-	print(bullet)
-	get_node("Bullets").add_child(bullet)
-	bullet.translation = _pos
-	bullet.rotation = _rot
-	bullet.own = _id
-
-func bullet_hit(_obj: Object, _own: int):
-	var _id: int = int(_obj.name)
-
-
-remotesync func _respawn_player(_id):
-	pass
-
-remotesync func _update_scoreBoard():
-	scoreBoard.updateBoard(playerData)
-
-remote func _update_playerData(_playerdata):
-	playerData = _playerdata
-	
-
-#New Code
-Extends Node
-class_name Network
-
-var code: String
-var ip: String
-var bulNum: int = 1
-var for_removal: Array = []
-var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-var PlayerName: String = "bob"
-var PlayerColor: Color = Color.red
-var playerData: Dictionary = {}
-var scoreBoard: ScoreBoard
-var connected: bool = false
-var bulletDamage: int = 20
-const hex: Dictionary = {"0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "a": 10, "b": 11, "c": 12, "d": 13, "e": 14, "f": 15}
-
-
-func _ready():
-
-	scoreBoard = get_node("/root/Game/UI/ScoreBoardPanel/ScoreBoard")
-	players = get_node("/root/Game/Players")
-
-func _process(delta):
-	for i in for_removal:
-		i.free()
-
-	for_removal = []
-
-	if (connected):
-		if (get_tree().is_network_server()):
-
-			rpc_unreliable("_update_playerData", playerData)
-			rpc_unreliable("_update_scoreBoard")
-			rpc_unreliable("_update_players")
-
+remotesync func _update_clients(_data: Dictionary):
+	scoreBoard.updateBoard(_data["players"])
+	players.update_players(_data["players"])
+	bullets.update_bullets(_data["bullets"])
