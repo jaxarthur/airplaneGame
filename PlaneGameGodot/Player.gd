@@ -79,6 +79,7 @@ func update_fire():
 		fireTimer = fireRate
 		var _rot = rotation
 		var _pos = translation + forward * -2 + up * .8
+		rpc_unreliable("fire_sound")
 		get_node("/root/Game/Bullets").spawn_client(_pos, _rot)
 		
 func rotate_prop():
@@ -87,10 +88,23 @@ func rotate_prop():
 
 func sync_with_puppets():
 	var _prop = get_node("Prop")
+	rpc_unreliable("plane_sound", throttleIn)
 	rpc_unreliable("sync_with_master", self.global_transform, _prop.global_transform)
 
 puppet func sync_with_master(_body, _prop):
 	var propObj = get_node("Prop")
 	self.global_transform = _body
 	propObj.global_transform = _prop
+
+remotesync func fire_sound():
+	get_node("FireSound").play()
+	
+remotesync func plane_sound(_speed: float):
+	var _sound: AudioStreamPlayer3D = get_node("PlaneSound")
+	_sound.pitch_scale = _speed /2 + .5
+	if _speed > 0:
+		if not _sound.playing:
+			_sound.play()
+	else:
+		_sound.stop()
 	

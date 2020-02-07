@@ -12,7 +12,7 @@ func _background(_bool):
 		focus_mode = Control.FOCUS_NONE
 
 func _startmenu(_bool):
-	var _obj: HBoxContainer = get_node("CenterContainer/StartMenu")
+	var _obj: VBoxContainer = get_node("CenterContainer/StartMenu")
 	_obj.visible = _bool
 	if _bool:
 		_obj.focus_mode = Control.FOCUS_ALL
@@ -20,7 +20,7 @@ func _startmenu(_bool):
 		_obj.focus_mode = Control.FOCUS_NONE
 
 func _joinmenu(_bool):
-	var _obj: HBoxContainer = get_node("CenterContainer/JoinMenu")
+	var _obj: VBoxContainer = get_node("CenterContainer/JoinMenu")
 	_obj.visible = _bool
 	if _bool:
 		_obj.focus_mode = Control.FOCUS_ALL
@@ -28,7 +28,7 @@ func _joinmenu(_bool):
 		_obj.focus_mode = Control.FOCUS_NONE
 
 func _playermenu(_bool):
-	var _obj: HBoxContainer = get_node("CenterContainer/PlayerMenu")
+	var _obj: VBoxContainer = get_node("CenterContainer/PlayerMenu")
 	_obj.visible = _bool
 	if _bool:
 		_obj.focus_mode = Control.FOCUS_ALL
