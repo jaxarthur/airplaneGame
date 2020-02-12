@@ -17,7 +17,7 @@ func _add_players(_playerData: Dictionary, _players: Array):
 				contains = true
 		
 		if !contains:
-			var _player: Player = preload("res://Player.tscn").instance()
+			var _player: Player = preload("res://Scenes/Player.tscn").instance()
 			print(_key)
 			_player.set_name(str(_key))
 			_player.PlayerName = _playerData[_key]["name"]

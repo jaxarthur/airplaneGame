@@ -1,0 +1,48 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type spatial;
+render_mode diffuse_toon, specular_toon;
+
+uniform float heightScale;
+uniform float noiseScale;
+uniform vec2 moveSpeed;
+uniform sampler2D noise;
+
+float height(vec2 pos, float time) {
+	float x = (pos.x + (time * moveSpeed.x)) * noiseScale;
+	float y = (pos.y + (time * moveSpeed.y)) * noiseScale;
+	float noiseOut = texture(noise, vec2(x,y)).r;
+	return noiseOut * noiseScale;
+}
+
+void vertex() {
+	vec2 pos = VERTEX.xz;
+	float h = height(pos, TIME);
+	VERTEX.y += h * heightScale;
+	
+	NORMAL = normalize(vec3(h - height(pos + vec2(0.1, 0.0), TIME), 100, h - height(pos + vec2(0.0, 0.1), TIME)));
+}
+
+void fragment() {
+	METALLIC = 0.0;
+	ROUGHNESS = 0.01;
+	RIM = 0.2;
+	ALBEDO = vec3(0.0, 0.3, 0.5);
+}
+
+
+"
+
+[sub_resource type="OpenSimplexNoise" id=2]
+
+[sub_resource type="NoiseTexture" id=3]
+seamless = true
+noise = SubResource( 2 )
+
+[resource]
+shader = SubResource( 1 )
+shader_param/heightScale = 20.0
+shader_param/noiseScale = 0.7
+shader_param/moveSpeed = Vector2( 0.05, 0.05 )
+shader_param/noise = SubResource( 3 )

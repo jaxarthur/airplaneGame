@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://fonts/ScoreboardFont.tres" type="DynamicFont" id=1]
+[ext_resource path="res://Scripts/ScoreBoard.gd" type="Script" id=2]
+[ext_resource path="res://fonts/MenuFont.tres" type="DynamicFont" id=3]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.6, 0.6, 0.6, 0.270588 )
+
+[sub_resource type="Theme" id=2]
+default_font = ExtResource( 1 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0, 1, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 1, 0, 0, 1 )
+
+[node name="UI" type="HBoxContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreBoardPanel" type="PanelContainer" parent="."]
+margin_right = 200.0
+margin_bottom = 22.0
+size_flags_vertical = 0
+custom_styles/panel = SubResource( 1 )
+
+[node name="ScoreBoard" type="VBoxContainer" parent="ScoreBoardPanel"]
+margin_right = 200.0
+margin_bottom = 22.0
+size_flags_vertical = 0
+theme = SubResource( 2 )
+script = ExtResource( 2 )
+
+[node name="TitleBar" type="Label" parent="ScoreBoardPanel/ScoreBoard"]
+margin_right = 200.0
+margin_bottom = 22.0
+text = "Name   Deaths  Kills"
+
+[node name="Spacer" type="Control" parent="."]
+margin_left = 204.0
+margin_right = 244.0
+margin_bottom = 1080.0
+rect_min_size = Vector2( 40, 0 )
+
+[node name="CodeDisplay" type="Label" parent="."]
+margin_left = 248.0
+margin_right = 412.0
+margin_bottom = 29.0
+rect_min_size = Vector2( 164, 0 )
+size_flags_vertical = 0
+custom_fonts/font = ExtResource( 3 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+text = "TEST"
+
+[node name="Spacer2" type="Control" parent="."]
+margin_left = 416.0
+margin_right = 516.0
+margin_bottom = 1080.0
+rect_min_size = Vector2( 100, 0 )
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+margin_left = 520.0
+margin_right = 1920.0
+margin_bottom = 50.0
+rect_min_size = Vector2( 50, 50 )
+size_flags_horizontal = 3
+custom_styles/fg = SubResource( 3 )
+custom_styles/bg = SubResource( 4 )
+value = 50.0

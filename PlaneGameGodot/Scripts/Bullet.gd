@@ -1,9 +1,9 @@
 extends Spatial
 class_name Bullet
 
-var velocity: float = 2
+var velocity: float = 6
 var ray: RayCast
-var ttl: float = 3
+var ttl: float = 1
 var own: int
 
 func _ready():
@@ -15,7 +15,7 @@ func _physics_process(delta):
 		translation = translation + (get_global_transform().basis.z*velocity)
 		rpc_unreliable("_sync_pos", get_global_transform())
 		ray.force_raycast_update()
-		var _collision: PhysicsBody = ray.get_collider()
+		var _collision: CollisionObject = ray.get_collider()
 		if _collision != null:
 			if(_collision.name != "StaticBody"):
 				get_node("/root/Game/Bullets").hit(_collision, own)
